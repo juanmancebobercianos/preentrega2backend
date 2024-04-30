@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products</title>
+</head>
+<body>
+    <h1>Products</h1>
+    <% products.forEach(product => { %>
+        <div>
+            <h2><%= product.title %></h2>
+            <p>Description: <%= product.description %></p>
+            <p>Price: <%= product.price %></p>
+            <p>Category: <%= product.category %></p>
+            <button onclick="addToCart('<%= product.id %>')">Add to Cart</button>
+        </div>
+    <% }) %>
+    <div>
+        <% if (prevLink) { %>
+            <a href="<%= prevLink %>">Previous</a>
+        <% } %>
+        <% if (nextLink) { %>
+            <a href="<%= nextLink %>">Next</a>
+        <% } %>
+    </div>
+    <script>
+        function addToCart(productId) {
+            fetch(`/api/carts/<%= cartId %>/product/${productId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ quantity: 1 })
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Product added to cart successfully');
+                } else {
+                    alert('Failed to add product to cart');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred');
+            });
+        }
+    </script>
+</body>
+</html>
